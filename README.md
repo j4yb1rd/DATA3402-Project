@@ -1,114 +1,41 @@
 ![](UTA-DataScience-Logo.png)
 
-# Project Title
+# Scrabble Player Rating Prediction
 
-* **One Sentence Summary** Ex: This repository holds an attempt to apply LSTMs to Stock Market using data from
-"Get Rich" Kaggle challenge (provide link). 
+*This repository contains my attempts to emulate the [Scrabble Player Rating](https://www.kaggle.com/competitions/scrabble-player-rating) challenge on Kaggle.
 
 ## Overview
 
-* This section could contain a short paragraph which include the following:
-  * **Definition of the tasks / challenge**  Ex: The task, as defined by the Kaggle challenge is to use a time series of 12 features, sampled daily for 1 month, to predict the next day's price of a stock.
-  * **Your approach** Ex: The approach in this repository formulates the problem as regression task, using deep recurrent neural networks as the model with the full time series of features as input. We compared the performance of 3 different network architectures.
-  * **Summary of the performance achieved** Ex: Our best model was able to predict the next day stock price within 23%, 90% of the time. At the time of writing, the best performance on Kaggle of this metric is 18%.
+* The task as defined by the Kaggle challenge was to predict the ratings of players while using previous-played games on [Woogles.io](https://woogles.io/) as training data.
+* I used an MLP classifier using Keras after manipulation of the data with Numpy and Pandas.
+* I ran the network, and after some trial and error, it luckily worked, although I'm unclear as to how accurate it is, as the data with which I would need to compare it is only available through Kaggle.
 
-## Summary of Workdone
-
-Include only the sections that are relevant an appropriate.
+## Summary
 
 ### Data
 
-* Data:
-  * Type: For example
-    * Input: medical images (1000x1000 pixel jpegs), CSV file: image filename -> diagnosis
-    * Input: CSV file of features, output: signal/background flag in 1st column.
-  * Size: How much data?
-  * Instances (Train, Test, Validation Split): how many data points? Ex: 1000 patients for training, 200 for testing, none for validation
+* CSV files (games, train, turns [not included], test). Size: 116 MB
 
-#### Preprocessing / Clean up
+### Preprocessing / Clean up
 
-* Describe any manipulations you performed to the data.
+* I attempted to clean up the data by manipulating it using Numpy and Pandas. The way the competition's data was structured was weird, so I found myself having a very difficult time in managing it. Specifically, there were many `NaN` values present in the testing data. So, initally I added these `NaN`s to the training data as well in order to split it into a viable system of inputs and targets, but eventually, I had to resort of using 0 as a float instead. I understand that this is naive; however, this may produce a new perspective of looking at this problem.
 
-#### Data Visualization
+### Data Visualization
 
-Show a few visualization of the data and say a few words about what you see.
+![](loss.png)
 
-### Problem Formulation
+Here is a graph of how loss was minimized over time using this particular algorithm.
 
-* Define:
-  * Input / Output
-  * Models
-    * Describe the different models you tried and why.
-  * Loss, Optimizer, other Hyperparameters.
+### Problem Formulation and Training
 
-### Training
-
-* Describe the training:
-  * How you trained: software and hardware.
-  * How did training take.
-  * Training curves (loss vs epoch for test/train).
-  * How did you decide to stop training.
-  * Any difficulties? How did you resolve them?
-
-### Performance Comparison
-
-* Clearly define the key performance metric(s).
-* Show/compare results in one table.
-* Show one (or few) visualization(s) of results, for example ROC curves.
-
+  * Input was defined as taking from each game the scores, player ratings, which player won, and which player was a bot. There were three bots used in this data collection: BetterBot, HastyBot, and STEEBot.
+  * I was only able to use a multi-layer perceptron classifier (MLP) before the project was due.
+  * The model was optimized with mean-square error (MSE) as the cost function and Adam as the optimizer with a learning rate of `alpha = 1e-3`.
+  * Model took approximately 100 seconds to train, and was able to produce predictions with the testing data.
+  
 ### Conclusions
 
-* State any conclusions you can infer from your work. Example: LSTM work better than GRU.
-
-### Future Work
-
-* What would be the next thing that you would try.
-* What are some other studies that can be done starting from here.
-
-## How to reproduce results
-
-* In this section, provide instructions at least one of the following:
-   * Reproduce your results fully, including training.
-   * Apply this package to other data. For example, how to use the model you trained.
-   * Use this package to perform their own study.
-* Also describe what resources to use for this package, if appropirate. For example, point them to Collab and TPUs.
-
-### Overview of files in repository
-
-* Describe the directory structure, if any.
-* List all relavent files and describe their role in the package.
-* An example:
-  * utils.py: various functions that are used in cleaning and visualizing data.
-  * preprocess.ipynb: Takes input data in CSV and writes out data frame after cleanup.
-  * visualization.ipynb: Creates various visualizations of the data.
-  * models.py: Contains functions that build the various models.
-  * training-model-1.ipynb: Trains the first model and saves model during training.
-  * training-model-2.ipynb: Trains the second model and saves model during training.
-  * training-model-3.ipynb: Trains the third model and saves model during training.
-  * performance.ipynb: loads multiple trained models and compares results.
-  * inference.ipynb: loads a trained model and applies it to test data to create kaggle submission.
-
-* Note that all of these notebooks should contain enough text for someone to understand what is happening.
+* Using other kinds of classifiers in the future may be beneficial, such as using stochastic gradient descent classifiers (SGD) or random forest classifiers.
 
 ### Software Setup
-* List all of the required packages.
-* If not standard, provide or point to instruction for installing the packages.
-* Describe how to install your package.
-
-### Data
-
-* Point to where they can download the data.
-* Lead them through preprocessing steps, if necessary.
-
-### Training
-
-* Describe how to train the model
-
-#### Performance Evaluation
-
-* Describe how to run the performance evaluation.
-
-
-## Citations
-
-* Provide any references.
+* Packages required: `pandas`, `numpy`, `tensorflow`, `matplotlib`
